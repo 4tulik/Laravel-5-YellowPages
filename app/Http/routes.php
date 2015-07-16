@@ -11,6 +11,15 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'WelcomeController@index');
+
+Route::get('home', 'HomeController@index');
+
+Route::get('woj/{woj}', 'HomeController@showPowiaty');
+Route::get('woj/{woj}/pow/{pow}', 'HomeController@showGminy');
+Route::get('pow/{pow}/gmi/{gmi}', 'HomeController@showGmina');
+
+Route::controllers([
+	'auth' => 'Auth\AuthController',
+	'password' => 'Auth\PasswordController',
+]);
