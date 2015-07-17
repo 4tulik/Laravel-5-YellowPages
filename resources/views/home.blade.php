@@ -51,27 +51,37 @@
 			</div>
 			@endif
 		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
 
-		<br />
-		<br />
-		@include('partials/left_menu')
-		<div class="col-md-9">
-			<div class="panel panel-default">
-				<div class="panel-heading">Home</div>
-				@include('partials/item_table')
+					<div class="well">
+						<div class="row">
+							@include('partials/left_menu/wojewodztwa')
+							@include('partials/left_menu/powiaty')
+							@include('partials/left_menu/gminy')
+
+						</div>
+					</div>
+				</div>
+				<div class="col-md-9">
+					<div class="panel panel-default">
+						<div class="panel-heading">Home</div>
+						@include('partials/item_table')
+					</div>
+				</div>
+				@if(isset($podmioty))
+				{!! $podmioty->render() !!}
+				@endif
+				@if(isset($podmioty))
+				{!! $podmioty->render() !!}
+				@endif
 			</div>
 		</div>
-		@if(isset($podmioty))
-		{!! $podmioty->render() !!}
-		@endif
-		@if(isset($podmioty))
-		{!! $podmioty->render() !!}
-		@endif
 	</div>
-</div>
-@if(isset($podmioty))
-{!! $podmioty->render() !!}
-@endif
+	@if(isset($podmioty))
+	{!! $podmioty->render() !!}
+	@endif
 
 </div>
 </div>

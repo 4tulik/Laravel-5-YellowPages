@@ -27,3 +27,17 @@
 		@endif
 	</tbody>
 </table>
+@foreach($reviews as $review)
+<hr>
+<div class="row">
+	<div class="col-md-12">
+		@for ($i=1; $i <= 5 ; $i++)
+		<span class="glyphicon glyphicon-star{{ ($i <= $review->rating) ? '' : '-empty'}}"></span>
+		@endfor
+
+		{{ $review->user ? $review->user->name : 'Anonymous'}} <span class="pull-right">{{$review->timeago}}</span>
+
+		<p>{{{$review->comment}}}</p>
+	</div>
+</div>
+@endforeach
