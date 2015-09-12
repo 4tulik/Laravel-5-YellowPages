@@ -1,7 +1,9 @@
-<?php namespace App\Http\Controllers;
+<?php
+namespace App\Http\Controllers;
 
 use DB;
 use Psy\getAll;
+use Input;
 
 class HomeController extends Controller {
 
@@ -33,101 +35,150 @@ class HomeController extends Controller {
 	*/
 	public function index()
 	{
-		$wojewodztwa = DB::table('wojewodztwo')->get();
+		$wojewodztwa = DB::table('terc')->where('pow', "=", 0)->where('gmi', "=", 0)->get();
 
 		$id = array();
 		foreach ($wojewodztwa as $key => $value) {
-			$id[] = $value->id;
+			$id[] = $value->woj;
 		}
 		foreach ($id as $key => $value) {
-			$ilosc[$value] = DB::table('podmiot')->where('wojewodztwo_id', $value)->count();
+			$ilosc[$value] = DB::table('podmiot')->where('woj', $value)->count();
 		}
 		foreach ($id as $key => $value) {
-			$ilosc[$value] = DB::table('podmiot')->where('wojewodztwo_id', $value)->count();
+			$ilosc[$value] = DB::table('podmiot')->where('woj', $value)->count();
 		}
-		$miejscowosci = $this->showMiejscowsci(NULL);
 		return view('home', [
-			'miejscowosci' => $miejscowosci,
 			'wojewodztwa' => $wojewodztwa,
 			'ilosc' => $ilosc]);
 
+	}
+	public function search(){
+
+		$wojewodztwa = DB::table('terc')->where('pow', "=", 0)->where('gmi', "=", 0)->get();
+
+		$id = array();
+		foreach ($wojewodztwa as $key => $value) {
+			$id[] = $value->woj;
 		}
-		public function showPowiaty($woj=null){
-			if(isset($woj)){
-				$wojewodztwo = DB::table('wojewodztwo')->where('id', $woj)->first();
-				$powiat = DB::table('powiat')->where('wojewodztwo_id', $woj)->first();
-				$powiaty = DB::table('powiat')->where('wojewodztwo_id', $woj)->get();
-				$podmioty = DB::table('podmiot')->where('wojewodztwo_id', $woj)->paginate(15);
+		foreach ($id as $key => $value) {
+			$ilosc[$value] = DB::table('podmiot')->where('woj', $value)->count();
+		}
+		foreach ($id as $key => $value) {
+			$ilosc[$value] = DB::table('podmiot')->where('woj', $value)->count();
+		}
+
+			$term = Input::get('query');
+			$podmioty = DB::table('podmiot')->where('search', 'like', '%'.$term.'%')->paginate(15);
+
+		    return view('home',[
+				'podmioty' => $podmioty,
+				'wojewodztwa' => $wojewodztwa,
+				'ilosc' => $ilosc]);
+		}
+
+
+	public function showPowiaty($woj=null){
+		if(isset($woj)){
+			$wojewodztwo = DB::table('terc')->where('woj', '=', $woj)->where('pow', "=", 0)->where('gmi', "=", 0)->first();
+			$powiat = DB::table('terc')->where('woj', '=', $woj)->where('pow', "=", 0)->where('gmi', "=", 0)->first();
+			$powiaty = DB::table('terc')->where('woj', "=", $woj)->where('gmi', "=", 0)->where('nazpod', "!=", 'miasto na prawach powiatu')->get();
+			$miasta = DB::table('terc')->where('woj', "=", $woj)->where('gmi', "=", 0)->where('nazpod', "=", 'miasto na prawach powiatu')->get();
+			$podmioty = DB::table('podmiot')->where('woj', $woj)->paginate(15);
+			$id = array();
+			foreach ($powiaty as $key => $value) {
+				$id[] = $value->pow;
+			}
+			foreach ($miasta as $key => $value) {
+				$id[] = $value->pow;
+			}
+			$ilosc = array();
+			foreach ($id as $key => $value) {
+				$ilosc[$value] = DB::table('podmiot')->where('woj', '=', $woj)->where('pow', $value)->count();
+			}
+
+			return view('home',[
+				'wojewodztwo' => $wojewodztwo,
+				'powiat' => $powiat,
+				'powiaty' => $powiaty,
+				'miasta' => $miasta,
+				'podmioty' => $podmioty,
+				'ilosc' => $ilosc]);
+		}
+	}
+	public function showGminy($woj=null, $pow=null){
+		if(isset($pow)){
+			$wojewodztwo = DB::table('terc')->where('woj', '=', $woj)->where('pow', "=", 0)->where('gmi', "=", 0)->first();
+			$powiat = DB::table('terc')->where('woj', '=', $woj)->where('pow', "=", 0)->where('gmi', "=", 0)->first();
+			$powiaty = DB::table('terc')->where('woj', "=", $woj)->where('gmi', "=", 0)->where('nazpod', "!=", 'miasto na prawach powiatu')->get();
+			$gminy = DB::table('terc')->where('woj', "=", $woj)->where('pow', $pow)->get();
+			$miasta_gminy = DB::table('terc')->where('woj', "=", $woj)->where('gmi', "=", 0)->where('nazpod', "=", 'miasto na prawach powiatu')->get();
+			$podmioty = DB::table('podmiot')->where('woj', $woj)->where('pow', $pow)->paginate(15);
+
+			$iloscMiasta = array();
+			foreach ($miasta_gminy as $key => $value) {
+				$id_miasta[] = $value->pow;
+			}
+			foreach ($id_miasta as $key => $value) {
+				$iloscMiasta[$value] = DB::table('podmiot')->where('woj', '=', $woj)->where('pow', $value)->count();
+			}
+
+			$id_gminy = array();
+			foreach ($gminy as $key => $value) {
+				$id_gminy[] = $value->gmi;
+			}
+			$iloscGminy = array();
+			foreach ($id_gminy as $key => $value) {
+				$iloscGminy[$value] = DB::table('podmiot')->where('woj', '=', $woj)->where('pow', $pow)->where('gmi', $value)->count();
+			}
+
+			return view('home',[
+				'powiat' => $powiat,
+				'gminy' => $gminy,
+				'miasta_gminy' => $miasta_gminy,
+				'podmioty' => $podmioty,
+				'iloscMiasta' => $iloscMiasta,
+				'iloscGminy' => $iloscGminy,
+
+				]); }
+		}
+		public function showGmina($woj=null,$pow=null, $gmi=null){
+			if(isset($gmi)){
+				$wojewodztwo = DB::table('terc')->where('woj', '=', $woj)->where('pow', "=", 0)->where('gmi', "=", 0)->first();
+				$powiat = DB::table('terc')->where('woj', '=', $woj)->where('pow', "=", 0)->where('gmi', "=", 0)->first();
+				$powiaty = DB::table('terc')->where('woj', "=", $woj)->where('gmi', "=", 0)->first();
+				$gminy = DB::table('terc')->where('woj', "=", $woj)->where('pow', $pow)->get();
+				$podmioty = DB::table('podmiot')->where('woj', $woj)->where('pow', $pow)->where('gmi', $gmi)->paginate(15);
 				$id = array();
-				foreach ($powiaty as $key => $value) {
-					$id[] = $value->id;
+				foreach ($gminy as $key => $value) {
+					$id[] = $value->gmi;
 				}
 				$ilosc = array();
 				foreach ($id as $key => $value) {
-					$ilosc[$value] = DB::table('podmiot')->where('powiat_id', $value)->count();
+					$ilosc[$value] = DB::table('podmiot')->where('woj', '=', $woj)->where('pow', $pow)->where('gmi', $value)->count();
 				}
-				$where = "AND wojewodztwo_id = $woj";
-				$miejscowosci = $this->showMiejscowsci($where);
-
+				$where = "AND pow = $pow";
+				$id_gminy = array();
+				foreach ($gminy as $key => $value) {
+					$id_gminy[] = $value->gmi;
+				}
+				$iloscGminy = array();
+				foreach ($id_gminy as $key => $value) {
+					$iloscGminy[$value] = DB::table('podmiot')->where('woj', '=', $woj)->where('pow', $pow)->where('gmi', $value)->count();
+				}
 				return view('home',[
-					'wojewodztwo' => $wojewodztwo,
-					'miejscowosci' => $miejscowosci,
 					'powiat' => $powiat,
-					'powiaty' => $powiaty,
+					'gminy' => $gminy,
 					'podmioty' => $podmioty,
-					'ilosc' => $ilosc]);
-				}
+					'iloscGminy' => $iloscGminy,
+					]); }
 			}
-			public function showGminy($woj=null, $pow=null){
-				if(isset($pow)){
-					$powiat_wojewodztwo = DB::table('wojewodztwo')->where('id', $woj)->first();
-					$powiat = DB::table('powiat')->where('id', $pow)->first();
-					$gminy = DB::table('gmina')->where('powiat_id', $pow)->get();
-					$podmioty = DB::table('podmiot')->where('powiat_id', $pow)->paginate(15);
-					$id = array();
-					foreach ($gminy as $key => $value) {
-						$id[] = $value->id;
-					}
-					$ilosc = array();
-					foreach ($id as $key => $value) {
-						$ilosc[$value] = DB::table('podmiot')->where('gmina_id', $value)->count();
-					}
-					$where = "AND wojewodztwo_id = $pow";
-					$miejscowosci = $this->showMiejscowsci($where);
-
-					return view('home',[
-						'powiat_wojewodztwo' => $powiat_wojewodztwo,
-						'powiat' => $powiat,
-						'gminy' => $gminy,
-						'miejscowosci' => $miejscowosci,
-						'podmioty' => $podmioty,
-						'ilosc' => $ilosc,
-						]); }
-				}
-				public function showGmina($pow=null, $gmi=null){
-					$gminy = DB::table('gmina')->where('powiat_id', $pow)->get();
-					$podmioty = DB::table('podmiot')->where('gmina_id', $gmi)->paginate(15);
-					$id = array();
-					foreach ($gminy as $key => $value) {
-						$id[] = $value->id;
-					}
-					$ilosc = array();
-					foreach ($id as $key => $value) {
-						$ilosc[$value] = DB::table('podmiot')->where('gmina_id', $value)->count();
-					}
-
-					return view('home', ['gminy' => $gminy,
-					'podmioty' => $podmioty,
-					'ilosc' => $ilosc
-					]);
-				}
 			private	function showMiejscowsci($string){
-					$sql = "SELECT\n"
-					. " COUNT(*) AS podmioty_ilosc, miejscowosc\n"
-					. "FROM podmiot\n"
-					. "WHERE miejscowosc IS NOT NULL $string \n"
-					. "GROUP By miejscowosc\n"
-					. "ORDER BY podmioty_ilosc DESC LIMIT 0, 5 ";
-					return $miejscowosci = DB::select( DB::raw($sql) );
-				}
+				$sql = "SELECT\n"
+				. " COUNT(*) AS podmioty_ilosc, miejscowosc\n"
+				. "FROM podmiot\n"
+				. "WHERE miejscowosc IS NOT NULL $string \n"
+				. "GROUP By miejscowosc\n"
+				. "ORDER BY podmioty_ilosc DESC LIMIT 0, 5 ";
+				return $miejscowosci = DB::select( DB::raw($sql) );
 			}
+		}

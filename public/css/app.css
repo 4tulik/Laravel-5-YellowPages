@@ -1,9 +1,11 @@
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
 html {
-  font-family: sans-serif;
+  font-family: 'Lato' sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
+
 body {
   margin: 0;
 }
@@ -13,7 +15,9 @@ details,
 figcaption,
 figure,
 footer,
-header,
+header{
+
+},
 hgroup,
 main,
 menu,
@@ -250,6 +254,8 @@ th {
     border: 1px solid #ddd !important;
   }
 }
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('../fonts/glyphicons-halflings-regular.eot');
@@ -304,7 +310,7 @@ th {
   content: "\e006";
 }
 .glyphicon-star-empty:before {
-  content: "\e007";
+  content: "\f005";
 }
 .glyphicon-user:before {
   content: "\e008";
@@ -6231,3 +6237,212 @@ label,
 .checkbox label {
   font-weight: 300;
 }
+
+/*
+    Note: It is best to use a less version of this file ( see http://css2less.cc
+    For the media queries use @screen-sm-min instead of 768px.
+    For .omb_spanOr use @body-bg instead of white.
+*/
+
+@media (min-width: 768px) {
+    .omb_row-sm-offset-3 div:first-child[class*="col-"] {
+        margin-left: 25%;
+    }
+}
+
+.omb_login .omb_authTitle {
+    text-align: center;
+  line-height: 300%;
+}
+
+.omb_login .omb_socialButtons a {
+  color: white; // In yourUse @body-bg
+  opacity:0.9;
+}
+.omb_login .omb_socialButtons a:hover {
+    color: white;
+  opacity:1;
+}
+.omb_login .omb_socialButtons .omb_btn-facebook {background: #3b5998;}
+.omb_login .omb_socialButtons .omb_btn-twitter {background: #00aced;}
+.omb_login .omb_socialButtons .omb_btn-google {background: #c32f10;}
+
+
+.omb_login .omb_loginOr {
+  position: relative;
+  font-size: 1.5em;
+  color: #aaa;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.omb_login .omb_loginOr .omb_hrOr {
+  background-color: #cdcdcd;
+  height: 1px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.omb_login .omb_loginOr .omb_spanOr {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -0.6em;
+  margin-left: -1.5em;
+  background-color: white;
+  width: 3em;
+  text-align: center;
+}
+
+.omb_login .omb_loginForm .input-group.i {
+  width: 2em;
+}
+.omb_login .omb_loginForm  .help-block {
+    color: red;
+}
+
+
+@media (min-width: 768px) {
+    .omb_login .omb_forgotPwd {
+        text-align: right;
+    margin-top:10px;
+  }
+}
+
+/*
+    Note: It is best to use a less version of this file ( see http://css2less.cc
+    For the media queries use @screen-sm-min instead of 768px.
+    For .omb_spanOr use @body-bg instead of white.
+*/
+
+@media (min-width: 768px) {
+    .omb_row-sm-offset-3 div:first-child[class*="col-"] {
+        margin-left: 25%;
+    }
+}
+
+.omb_login .omb_authTitle {
+   text-align: left;
+}
+
+.omb_login .omb_socialButtons a {
+  color: white; // In yourUse @body-bg
+  opacity:0.9;
+}
+.omb_login .omb_socialButtons a:hover {
+    color: white;
+  opacity:1;
+}
+.omb_login .omb_socialButtons .omb_btn-facebook {background: #3b5998;}
+.omb_login .omb_socialButtons .omb_btn-twitter {background: #00aced;}
+.omb_login .omb_socialButtons .omb_btn-google {background: #c32f10;}
+
+
+.omb_login .omb_loginOr {
+  position: relative;
+  font-size: 1.5em;
+  color: #aaa;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.omb_login .omb_loginOr .omb_hrOr {
+  background-color: #cdcdcd;
+  height: 1px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.omb_login .omb_loginOr .omb_spanOr {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: -0.6em;
+  margin-left: -1.5em;
+  background-color: white;
+  width: 3em;
+  text-align: center;
+}
+
+.omb_login .omb_loginForm .input-group.i {
+  width: 2em;
+}
+.omb_login .omb_loginForm  .help-block {
+    color: red;
+}
+
+
+@media (min-width: 768px) {
+    .omb_login .omb_forgotPwd {
+    text-align: right;
+    margin-top:10px;
+  }
+
+  .navbar-collapse {
+    position: relative;
+    padding-top: 30px !important;
+    max-height: 270px;
+  }
+  .navbar-collapse form[role="search"] {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 900%;
+    padding: 0px;
+    margin: 0px;
+    z-index: 0;
+  }
+  .navbar-collapse form[role="search"] button,
+  .navbar-collapse form[role="search"] input {
+    padding: 8px 12px;
+    border-radius: 0px;
+    border-width: 0px;
+    color: rgb(119, 119, 119);
+    background-color: rgb(248, 248, 248);
+    border-color: rgb(231, 231, 231);
+    box-shadow: none;
+    outline: none;
+  }
+  .navbar-collapse form[role="search"] input {
+    padding: 16px 12px;
+    font-size: 14pt;
+    font-style: italic;
+    color: rgb(160, 160, 160);
+    box-shadow: none;
+  }
+  .navbar-collapse form[role="search"] button[type="reset"] {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .navbar-collapse {
+      padding-top: 0px !important;
+      padding-right: 38px !important;
+    }
+    .navbar-collapse form[role="search"] {
+      width: 38px;
+    }
+    .navbar-collapse form[role="search"] button,
+    .navbar-collapse form[role="search"] input {
+      padding: 15px 12px;
+    }
+    .navbar-collapse form[role="search"] input {
+      font-size: 18pt;
+      opacity: 0;
+      display: none;
+            height: 50px;
+    }
+    .navbar-collapse form[role="search"].active {
+      width: 100%;
+    }
+    .navbar-collapse form[role="search"].active button,
+    .navbar-collapse form[role="search"].active input {
+      display: table-cell;
+      opacity: 1;
+    }
+      .navbar-collapse form[role="search"].active input {
+      width: 100%;
+    }
+
+
+  }

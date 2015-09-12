@@ -1,5 +1,9 @@
 <?php
 use App\Models;
+use Illuminate\Database\Eloquent\Model;
+use SocialNorm\Exceptions\ApplicationRejectedException;
+use SocialNorm\Exceptions\InvalidAuthorizationCodeException;
+use App\User;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -10,41 +14,33 @@ use App\Models;
 | and give it the controller to call when that URI is requested.
 |
 */
-
-//Route::get('/', 'HomeController@index');
-
-Route::get('home', 'HomeController@index');
-
-Route::get('woj/{woj}', 'HomeController@showPowiaty');
-Route::get('woj/{woj}/pow/{pow}', 'HomeController@showGminy');
-Route::get('pow/{pow}/gmi/{gmi}', 'HomeController@showGmina');
-
 Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
+  'auth' => 'Auth\AuthController',
+  'password' => 'Auth\PasswordController',
 ]);
-Route::get('/', function()
-{
-  $podmioty = Podmiot::all();
-  return View::make('index', array('products'=>$products));
+
+Route::get('/', 'ItemController@index');
+Route::get('woj/{woj}', 'ItemController@showPowiaty');
+Route::get('woj/{woj}/pow/{pow}', 'ItemController@showGminy');
+Route::get('woj/{woj}/pow/{pow}/gmi/{gmi}', 'ItemController@showGmina');
+
+Route::any('/search', 'SearchController@search');
+
+Route::get('facebook/authorize', function () {
+	return OAuth::authorize('facebook');
 });
-Route::post('products/{id}', array('before'=>'csrf', function($id)
-{
-  $input = array(
-	'comment' => Input::get('comment'),
-	'rating'  => Input::get('rating')
-  );
-  // instantiate Rating model
-  $review = new Review;
+Route::get('google/authorize', function () {
+  return OAuth::authorize('google');
+});
+Route::get('facebook/login', 'SocialController@facebookLogin');
 
-  // Validate that the user's input corresponds to the rules specified in the review model
-  $validator = Validator::make( $input, $review->getCreateRules());
 
-  // If input passes validation - store the review in DB, otherwise return to product page with error message
-  if ($validator->passes()) {
-	$review->storeReviewForProduct($id, $input['comment'], $input['rating']);
-	return Redirect::to('podmiot/'.$id.'#reviews-anchor')->with('review_posted',true);
-  }
+Route::get('google/redirect', 'SocialController@googleRedirect');
 
-  return Redirect::to('podmiot/'.$id.'#reviews-anchor')->withErrors($validator)->withInput();
-}));
+Route::any('autocomplete/', 'SearchController@autocomplete');
+
+Route::get('podmiot/{slug}', 'ItemController@showItem');
+
+
+// Route that handles submission of review - rating/comment
+Route::post('podmiot/{slug}', array('before'=>'csrf', 'ReviewController@addReview'));

@@ -1,43 +1,49 @@
+               @if(isset($podmioty))
+        <div class=" col-md-12 ">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nazwa</th>
+                        <th class="text-center">Ocena</th>
+                    </tr>
+                </thead>
+                <tbody>
+			   @foreach ($podmioty as $podmiot)
+					<tr>
+                        <td class="col-md-7 col-md-offset-1">
+                        <div class="media">
+                            <a class="thumbnail pull-left" href="#"> <img class="media-object" src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png" style="width: 72px; height: 72px;"> </a>
+                            <div class="media-body" style="padding: 10px">
+                                <h4 class="media-heading"><a href="/podmiot/{{ $podmiot->nazwa_slug }}">{{ $podmiot->nazwa }}</a></h4>
+								<span>{{ $podmiot->ulica_typ }} {{ $podmiot->ulica_nazwa}} </span><span class="text-success"><strong></strong></span>
+                                <h5 class="media-heading">{{ $podmiot->pna }} <a href="#">{{ $podmiot->miejscowosc }}</a></h5>
+                                <h6 class="media-heading">
+                                <i class="fa fa-caret-square-o-right"></i> NIP:</i> {{ $podmiot->nip }} |
+                                <i class="fa fa-caret-square-o-right"></i> Regon: {{$podmiot->regon }}
+                                | <strong><i class="fa fa-phone"></i> Nr telefonu: {{ $podmiot->nr_telefonu }} </strong>
+                                </h6>
 
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Nazwa</th>
-			<th>Kod-Pocztowy</th>
-			<th>Adres</th>
-		</tr>
-	</thead>
-	<tbody>
-		@if(isset($podmioty))
-		@foreach ($podmioty as $podmiot)
-		<tr>
-			<td>{{ $podmiot->podmiot_id }}</td>
-			<td>{{ $podmiot->nazwa }}</td>
-			<td>{{ $podmiot->pna }}</td>
-			@if($podmiot->ulica_nazwa == NULL )
-			<td>{{ 'gmi. ' . $podmiot->gmina_id }}</td>
-			@elseif($podmiot->ulica_nazwa == NULL && $podmiot->miejscowosc == NULL )
-			<td>{{ 'msc. ' . $podmiot->miejscowosc }}</td>
-			@else
-			<td>{{ $podmiot->ulica_cecha }} {{$podmiot->ulica_nazwa}}</td>
-			@endif
-		</tr>
-		@endforeach
-		@endif
-	</tbody>
-</table>
-@foreach($reviews as $review)
-<hr>
-<div class="row">
-	<div class="col-md-12">
-		@for ($i=1; $i <= 5 ; $i++)
-		<span class="glyphicon glyphicon-star{{ ($i <= $review->rating) ? '' : '-empty'}}"></span>
-		@endfor
+                            </div>
+                        </div></td>
+                        <td class="col-sm-2 col-md-2" style="text-align: center">
+                        Ilość opinii: {{ $podmiot->rating_count }}
+                            <div class="row lead">
+                    @for ($i=1; $i <= 5 ; $i++)
+                      <span class="glyphicon glyphicon-star{{ ($i <= $podmiot->rating_cache) ? '' : '-empty'}}"></span>
+                    @endfor
+                    </div>
+                    Średnia ocena: {{ $podmiot->rating_cache }} <br/>
+                    <a href="/podmiot/{{ $podmiot->nazwa_slug }}#reviews-anchor">Dodaj opinię</a>
 
-		{{ $review->user ? $review->user->name : 'Anonymous'}} <span class="pull-right">{{$review->timeago}}</span>
 
-		<p>{{{$review->comment}}}</p>
-	</div>
-</div>
-@endforeach
+                        </td>
+
+
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        @endif
+

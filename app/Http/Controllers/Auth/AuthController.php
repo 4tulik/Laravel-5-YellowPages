@@ -6,6 +6,10 @@ use App\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Socialize as Socialite;
+use Auth;
+use App\Http\Controllers\Auth\Redirect;
 
 class AuthController extends Controller
 {
@@ -31,6 +35,7 @@ class AuthController extends Controller
     {
         $this->middleware('guest', ['except' => 'getLogout']);
     }
+
 
     /**
      * Get a validator for an incoming registration request.
@@ -61,4 +66,8 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+    public function login(AuthenticateUser $authenticateUser, Request $request, $provider = null) {
+       return $authenticateUser->execute($request->all(), $this, $provider);
+    }
+
 }

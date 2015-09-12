@@ -7,9 +7,14 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
+        "laravel/socialite": "2.0.x-dev",
         "barryvdh/laravel-ide-helper": "^2.0@dev",
         "barryvdh/laravel-debugbar": "^2.0@dev",
-        "davejamesmiller/laravel-breadcrumbs": "dev-master"
+        "davejamesmiller/laravel-breadcrumbs": "dev-master",
+        "illuminate/html": "5.0.*",
+        "adamwathan/eloquent-oauth-l5": "dev-master",
+        "doctrine/dbal": "~2.3",
+        "mews/captcha": "~2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
